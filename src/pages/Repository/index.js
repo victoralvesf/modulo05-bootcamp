@@ -72,7 +72,11 @@ function Repository({ match }) {
                   {issue.title} &nbsp;
                 </a>
                 {issue.labels.map((label) => (
-                  <Label color={label.color} title={label.description}>
+                  <Label
+                    color={label.color}
+                    key={String(label.id)}
+                    title={label.description}
+                  >
                     <small>{label.name}</small>
                   </Label>
                 ))}

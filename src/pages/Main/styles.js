@@ -49,6 +49,12 @@ const rotateAnimation = css`
   }
 `;
 
+const disable = css`
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.6;
+`;
+
 export const SubmitButton = styled.button.attrs((props) => ({
   type: 'submit',
   disabled: props.loading === 'true',
@@ -58,6 +64,8 @@ export const SubmitButton = styled.button.attrs((props) => ({
   padding: 0 15px;
   margin-left: 10px;
   border-radius: 4px;
+
+  ${(props) => props.empty === '' && disable}
 
   display: flex;
   justify-content: center;

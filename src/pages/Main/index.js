@@ -65,7 +65,7 @@ export default function Main() {
           value={repo}
           onChange={handleInputChange}
         />
-        <SubmitButton loading={loading.toString()}>
+        <SubmitButton loading={loading.toString()} empty={repo}>
           {loading ? (
             <FaSpinner color="#fff" size={14} />
           ) : (
