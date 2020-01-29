@@ -3,10 +3,7 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  extends: [
-    'airbnb',
-    'prettier/react'
-  ],
+  extends: ['airbnb', 'prettier/react'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -19,19 +16,16 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    'prettier'
-  ],
+  plugins: ['react', 'prettier'],
   rules: {
     'prettier/prettier': 'error',
-    'react/jsx-filename-extension': [
-      'warn',
-      { extensions: ['.jsx', '.js'] }
-    ],
+    'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', '.js'] }],
     'import/prefer-default-export': 'off',
-    "object-curly-newline": ["error", {
-      "ImportDeclaration": "never",
-    }],
+    'object-curly-newline': [
+      'error',
+      {
+        ImportDeclaration: 'never',
+      },
+    ],
   },
 };

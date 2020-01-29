@@ -6,7 +6,7 @@ import { FaChevronLeft } from 'react-icons/fa';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Owner, OwnerLoading } from './styles';
+import { Owner, OwnerLoading, IssueList, Label } from './styles';
 
 function Repository({ match }) {
   const [repository, setRepository] = useState({});
@@ -61,6 +61,27 @@ function Repository({ match }) {
         <h1>{repository.name}</h1>
         <p>{repository.description}</p>
       </Owner>
+
+      <IssueList>
+        {issues.map((issue) => (
+          <li key={String(issue.id)}>
+            <img src={issue.user.avatar_url} alt={issue.user.login} />
+            <div>
+              <strong>
+                <a href={issue.html_url} target="blank">
+                  {issue.title} &nbsp;
+                </a>
+                {issue.labels.map((label) => (
+                  <Label color={label.color} title={label.description}>
+                    <small>{label.name}</small>
+                  </Label>
+                ))}
+              </strong>
+              <p>{issue.user.login}</p>
+            </div>
+          </li>
+        ))}
+      </IssueList>
     </Container>
   );
 }
