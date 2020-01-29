@@ -29,6 +29,9 @@ module.exports = {
       'warn',
       { extensions: ['.jsx', '.js'] }
     ],
-    'import/prefer-default-export': 'off'
+    'import/prefer-default-export': 'off',
+    "object-curly-newline": ["error", {
+      "ImportDeclaration": "never",
+    }],
   },
 };
