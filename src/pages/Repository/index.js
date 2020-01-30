@@ -6,24 +6,49 @@ import { FaChevronLeft } from 'react-icons/fa';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Owner, OwnerLoading, IssueList, Label } from './styles';
+import {
+  Owner,
+  OwnerLoading,
+  IssueList,
+  Label,
+  Filter,
+  Paginate,
+  Info,
+} from './styles';
 
 function Repository({ match }) {
-  const [repository, setRepository] = useState({});
+  const repoProp = decodeURIComponent(match.params.repository);
   // eslint-disable-next-line no-unused-vars
+  const [repoName, setRepoName] = useState(repoProp);
+  const [repository, setRepository] = useState({});
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [page, setPage] = useState(1);
+
+  async function loadIssues() {
+    api
+      .get(`/repos/${repoName}/issues`, {
+        params: {
+          state: filter,
+          per_page: 10,
+          page,
+        },
+      })
+      .then((res) => {
+        setIssues(res.data);
+      });
+  }
 
   useEffect(() => {
     async function fetchRepo() {
-      const repoName = decodeURIComponent(match.params.repository);
-
       const [repoInfo, issuesInfo] = await Promise.all([
         api.get(`/repos/${repoName}`),
         api.get(`/repos/${repoName}/issues`, {
           params: {
-            state: 'open',
-            per_page: 5,
+            state: filter,
+            per_page: 10,
+            page,
           },
         }),
       ]);
@@ -35,6 +60,26 @@ function Repository({ match }) {
 
     fetchRepo();
   }, []);
+
+  useEffect(() => {
+    async function load() {
+      await loadIssues();
+    }
+
+    load();
+  }, [filter]);
+
+  useEffect(() => {
+    async function load() {
+      await loadIssues();
+    }
+
+    load();
+  }, [page]);
+
+  function handleFilterChange(e) {
+    setFilter(e.target.value);
+  }
 
   if (loading) {
     return (
@@ -62,30 +107,58 @@ function Repository({ match }) {
         <p>{repository.description}</p>
       </Owner>
 
-      <IssueList>
-        {issues.map((issue) => (
-          <li key={String(issue.id)}>
-            <img src={issue.user.avatar_url} alt={issue.user.login} />
-            <div>
-              <strong>
-                <a href={issue.html_url} target="blank">
-                  {issue.title} &nbsp;
-                </a>
-                {issue.labels.map((label) => (
-                  <Label
-                    color={label.color}
-                    key={String(label.id)}
-                    title={label.description}
-                  >
-                    <small>{label.name}</small>
-                  </Label>
-                ))}
-              </strong>
-              <p>{issue.user.login}</p>
-            </div>
-          </li>
-        ))}
-      </IssueList>
+      <Filter>
+        <span>Filtro:</span>
+        <select onChange={handleFilterChange} value={filter.status}>
+          <option value="all">Todas</option>
+          <option value="open">Abertas</option>
+          <option value="closed">Fechadas</option>
+        </select>
+      </Filter>
+
+      {issues.length > 0 ? (
+        <IssueList>
+          {issues.map((issue) => (
+            <li key={String(issue.id)}>
+              <img src={issue.user.avatar_url} alt={issue.user.login} />
+              <div>
+                <strong>
+                  <a href={issue.html_url} target="blank">
+                    {issue.title} &nbsp;
+                  </a>
+                  {issue.labels.map((label) => (
+                    <Label
+                      color={label.color}
+                      key={String(label.id)}
+                      title={label.description}
+                    >
+                      <small>{label.name}</small>
+                    </Label>
+                  ))}
+                </strong>
+                <p>{issue.user.login}</p>
+              </div>
+            </li>
+          ))}
+        </IssueList>
+      ) : (
+        <Info>
+          <p>Nenhuma issue encontrada!</p>
+        </Info>
+      )}
+
+      {issues.length > 0 && (
+        <Paginate>
+          {page !== 1 && (
+            <button type="button" onClick={() => setPage(page - 1)}>
+              Página anterior
+            </button>
+          )}
+          <button type="button" onClick={() => setPage(page + 1)}>
+            Próxima página
+          </button>
+        </Paginate>
+      )}
     </Container>
   );
 }

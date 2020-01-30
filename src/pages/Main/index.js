@@ -31,24 +31,33 @@ export default function Main() {
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
+    try {
+      e.preventDefault();
+      setLoading(true);
 
-    await api
-      .get(`/repos/${repo}`)
-      .then((res) => {
-        const data = {
-          name: res.data.full_name,
-        };
+      if (repositories.find((item) => item.name === repo)) {
+        throw new Error('Repositorio ja adicionado');
+      }
 
-        setRepo('');
-        setRepositories([...repositories, data]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
+      await api
+        .get(`/repos/${repo}`)
+        .then((res) => {
+          const data = {
+            name: res.data.full_name,
+          };
+
+          setRepo('');
+          setRepositories([...repositories, data]);
+          setLoading(false);
+        })
+        .catch(() => {
+          setError(true);
+          setLoading(false);
+        });
+    } catch (_) {
+      setError(true);
+      setLoading(false);
+    }
   }
 
   return (

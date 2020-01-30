@@ -127,3 +127,49 @@ export const Label = styled.span`
     pointer-events: none;
   }
 `;
+
+export const Filter = styled.div`
+  display: flex;
+  padding: 5px;
+  justify-content: flex-end;
+  margin-top: 30px;
+
+  span {
+    margin-right: 5px;
+    font-weight: bold;
+  }
+`;
+
+export const Paginate = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+
+  button {
+    margin: 5px;
+    padding: 5px 10px;
+    border: 0;
+    border-radius: 4px;
+    background: #7159c1;
+    color: #fff;
+    font-weight: 600;
+  }
+`;
+
+export const Info = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #3cce3c;
+  padding: 15px;
+  border-radius: 4px;
+  border-bottom: 4px solid rgba(0, 0, 0, 0.3);
+  margin-top: 30px;
+
+  p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+  }
+`;
